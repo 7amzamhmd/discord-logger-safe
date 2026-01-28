@@ -16,7 +16,7 @@ client.on('messageDelete', message => {
   if (!message.guild) return;
 
   const logChannel = message.guild.channels.cache.find(
-    ch => ch.name === 'deleted-messages'
+    ch => ch.name === 'deleted-logs'
   );
   if (!logChannel) return;
 
