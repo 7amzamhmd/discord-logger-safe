@@ -1,31 +1,39 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+import { Client, GatewayIntentBits } from "npm:discord.js@14";
+
+const token = Deno.env.get("DISCORD_TOKEN");
+
+if (!token) {
+  console.log("❌ TOKEN NOT FOUND");
+  Deno.exit(1);
+}
 
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
+    GatewayIntentBits.MessageContent,
+  ],
 });
 
-client.once('ready', () => {
-  console.log('Delete Logger Bot is running');
+client.once("ready", () => {
+  console.log("✅ Delete Logger Bot is running");
 });
 
-client.on('messageDelete', message => {
+client.on("messageDelete", async (message) => {
   if (!message.guild) return;
 
   const logChannel = message.guild.channels.cache.find(
-    ch => ch.name === 'deleted-logs'
+    (ch) => ch.name === "deleted-logs"
   );
+
   if (!logChannel) return;
 
-  logChannel.send(
+  await logChannel.send(
     `🗑️ رسالة اتحذفت\n` +
-    `👤 العضو: ${message.author?.tag || 'غير معروف'}\n` +
+    `👤 العضو: ${message.author?.tag || "غير معروف"}\n` +
     `📍 الروم: ${message.channel}\n` +
-    `💬 النص: ${message.content || 'مش متاح'}`
+    `💬 النص: ${message.content || "مش متاح"}`
   );
 });
 
-client.login(process.env.TOKEN);
+client.login(token);
